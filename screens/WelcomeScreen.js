@@ -17,7 +17,6 @@ function WelcomeScreen({navigation}) {
   const isCustomerLoggedIn = async () => {
     try {
       const data = await AsyncStorage.getItem('userCredential');
-      console.log('Data is :', data);
 
       if (data) {
         const user = JSON.parse(data);
@@ -27,9 +26,7 @@ function WelcomeScreen({navigation}) {
       } else {
         setUserLogeedIn(false);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

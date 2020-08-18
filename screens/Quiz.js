@@ -9,12 +9,12 @@ import {
   Text,
   Alert,
   ActivityIndicator,
-  Button,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import Card from '../components/Card';
 import AppButton from '../components/AppButton';
+import AppButtonSmall from '../components/AppButtonSmall';
 import colors from '../app/assets/config/colors';
 
 function Quiz({navigation}) {
@@ -45,61 +45,68 @@ function Quiz({navigation}) {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <Button title="Logout" onPress={() => handleLogout()} />
+        <AppButtonSmall title="Logout" onPress={() => handleLogout()} />
       ),
     });
   });
 
   const loadData = async () => {
-    const response = await fetch(API_URL);
-    const questions = await response.json();
-    const {results} = questions;
-    results.forEach((item) => {
-      item.id = Math.floor(Math.random() * 10000);
-    });
+    if (quizQuestions.length === 0) {
+      console.log('Api call');
+      const response = await fetch(API_URL);
+      const questions = await response.json();
+      const {results} = questions;
+      results.forEach((item) => {
+        item.id = Math.floor(Math.random() * 10000);
+      });
 
-    setQuizQuestion(results);
-    setIsDataLoading(false);
+      setQuizQuestion(results);
+      setIsDataLoading(false);
+    }
   };
 
   const alertTo = () => {
-    Alert.alert(
-      'Quiz',
-      'Quiz is not compleated',
-      [{text: 'OK', onPress: () => setQuizCompleated(false)}],
-      {cancelable: false},
-    );
+    Alert.alert('Quiz', 'Quiz is not compleated', [{text: 'OK'}], {
+      cancelable: false,
+    });
   };
 
   const handleSubmitPress = () => {
-    answerArray.length === quizQuestions.length
-      ? setQuizCompleated(true)
-      : alertTo();
-    setCorrectAnswers(
-      answerArray.filter((element) => element.isOptionTrue === true).length,
-    );
+    if (answerArray.length === quizQuestions.length) {
+      let correctAnswerCount = answerArray.filter(
+        (element) => element.isOptionTrue === true,
+      ).length;
+      console.log('No of correct answers: ', correctAnswerCount);
+
+      setCorrectAnswers(correctAnswerCount);
+      setQuizCompleated(true);
+    } else {
+      alertTo();
+      console.log('quiz is not compleated');
+    }
   };
 
   const handleCardItem = (index, value, item) => {
-    //find the question index
-    let questionIndex = quizQuestions.indexOf(item);
+    //find the question id
+    let questionId = item.id;
 
-    //create a collection for question index and answer
+    //create a collection for question id and answer
     let collection = new Object();
-    collection.questionIndex = questionIndex;
+    collection.questionId = questionId;
     collection.isOptionTrue = value.isTrue;
 
     //if collection object already exist in answer array then delete it first
     answerArray.forEach(function (ans, index, object) {
-      if (ans.questionIndex === collection.questionIndex) {
+      if (ans.questionId === collection.questionId) {
         object.splice(index, 1);
       }
     });
 
-    //finally push collection object into answer array
+    // //finally push collection object into answer array
     answerArray.push(collection);
-  };
 
+    console.log(answerArray);
+  };
   return isDataLoading ? (
     <SafeAreaView style={styles.loadingQuestions}>
       <ActivityIndicator size="large" color="#000" />
@@ -112,6 +119,7 @@ function Quiz({navigation}) {
         keyExtractor={(quizQuestion) => quizQuestion.id.toString()}
         renderItem={({item}) => (
           <Card
+            key={item.id}
             question={item.question}
             allAnswers={item.incorrect_answers.concat(item.correct_answer)}
             onSelect={(index, value) => handleCardItem(index, value, item)}
