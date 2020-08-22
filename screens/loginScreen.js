@@ -1,13 +1,9 @@
 import React, {useState} from 'react';
 import {
-  View,
   StyleSheet,
   Image,
   Text,
   KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   Alert,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -19,10 +15,19 @@ function loginScreen({navigation}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const alertTo = () => {
+  const validationFailAlert = () => {
     Alert.alert(
       'Validation',
       'Username or Password is incorrect',
+      [{text: 'OK', onPress: () => Alert.dismiss}],
+      {cancelable: false},
+    );
+  };
+
+  const saveCredentialFailAlert = () => {
+    Alert.alert(
+      'Internal Error',
+      'Please login again for persistency',
       [{text: 'OK', onPress: () => Alert.dismiss}],
       {cancelable: false},
     );
@@ -34,52 +39,45 @@ function loginScreen({navigation}) {
         'userCredential',
         JSON.stringify({username: username, password: password}),
       );
-
-      const data = await AsyncStorage.getItem('userCredential');
-      const user = JSON.stringify(data);
-      console.log('user is: ', user);
+      const data = JSON.parse(await AsyncStorage.getItem('userCredential'));
+      return data;
     } catch (error) {
-      console.log(error);
+      saveCredentialFailAlert();
+      return {error: 'error'};
     }
   };
 
   const handleLogin = () => {
-    console.log(username, ' : ', password);
     if (username === 'adminUser' && password === '12345678') {
-      saveCredential();
-      navigation.replace('Quiz');
+      (async () => {
+        let {username} = await saveCredential();
+        if (username) {
+          navigation.replace('Quiz');
+        }
+      })();
     } else {
-      alertTo();
+      validationFailAlert();
     }
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.background}>
-          <View style={styles.logoContainer}>
-            <Image
-              style={styles.logo}
-              source={require('../app/assets/quiz_icon.png')}
-            />
-            <Text>You Know You Grow</Text>
-          </View>
-          <View style={styles.loginForm}>
-            <AppTextInput
-              placeholder="username"
-              onChangeText={(text) => setUsername(text)}
-            />
-            <AppTextInput
-              placeholder="password"
-              secureTextEntry
-              onChangeText={(text) => setPassword(text)}
-            />
-            <AppButton title="Login" onPress={() => handleLogin()} />
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
+    <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <Image
+        source={require('../app/assets/quiz_icon.png')}
+        style={styles.logo}
+      />
+      <Text>You Know You Grow</Text>
+
+      <AppTextInput
+        placeholder="username"
+        onChangeText={(text) => setUsername(text)}
+      />
+      <AppTextInput
+        placeholder="password"
+        secureTextEntry
+        onChangeText={(text) => setPassword(text)}
+      />
+      <AppButton title="Login" onPress={handleLogin} />
     </KeyboardAvoidingView>
   );
 }
@@ -102,8 +100,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: 100,
-    height: 100,
     margin: 10,
+    height: 100,
+    resizeMode: 'contain',
   },
   logoContainer: {
     position: 'absolute',
@@ -112,5 +111,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

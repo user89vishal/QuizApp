@@ -194,7 +194,6 @@
 				FAB96C8C5F16D1AB9FC39399 /* Pods-QuizApp-tvOSTests.debug.xcconfig */,
 				37244BEF1EAF497D3F8F1455 /* Pods-QuizApp-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

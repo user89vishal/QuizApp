@@ -26,7 +26,9 @@ function WelcomeScreen({navigation}) {
       } else {
         setUserLogeedIn(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      setUserLogeedIn(false);
+    }
   };
 
   useEffect(() => {
