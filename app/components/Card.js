@@ -34,7 +34,7 @@ function Card({question, allAnswers, onSelect}) {
       <View>
         <RadioGroup onSelect={(index, value) => onSelect(index, value)}>
           {allOptions.map((item) => (
-            <RadioButton value={item} color={item.isTrue ? 'green' : 'red'}>
+            <RadioButton value={item} color="green">
               <Text>{item.option}</Text>
             </RadioButton>
           ))}
