@@ -6,7 +6,6 @@ import {
   Platform,
   StatusBar,
   View,
-  Text,
   Alert,
   ActivityIndicator,
 } from 'react-native';
@@ -15,7 +14,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Card from '../components/Card';
 import AppButton from '../components/AppButton';
 import AppButtonSmall from '../components/AppButtonSmall';
-import colors from '../app/assets/config/colors';
+import AppText from '../components/AppText';
+import colors from '../config/colors';
 
 function Quiz({navigation}) {
   const API_URL = 'https://opentdb.com/api.php?amount=10&difficulty=hard';
@@ -110,7 +110,7 @@ function Quiz({navigation}) {
   return isDataLoading ? (
     <SafeAreaView style={styles.loadingQuestions}>
       <ActivityIndicator size="large" color="#000" />
-      <Text>Please wait while we are loading questions for you</Text>
+      <AppText>Please wait while we are loading questions for you</AppText>
     </SafeAreaView>
   ) : !quizCompleated ? (
     <SafeAreaView style={styles.screen}>
@@ -135,8 +135,8 @@ function Quiz({navigation}) {
     </SafeAreaView>
   ) : (
     <SafeAreaView style={styles.quizCompleateScreen}>
-      <Text>Quiz Compleated</Text>
-      <Text>Number of correct answers : {correctAnswers}</Text>
+      <AppText>Quiz Compleated</AppText>
+      <AppText>Number of correct answers : {correctAnswers}</AppText>
       <AppButton title="Play Again" onPress={() => setQuizCompleated(false)} />
     </SafeAreaView>
   );

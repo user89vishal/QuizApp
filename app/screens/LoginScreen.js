@@ -1,17 +1,12 @@
 import React, {useState} from 'react';
-import {
-  StyleSheet,
-  Image,
-  Text,
-  KeyboardAvoidingView,
-  Alert,
-} from 'react-native';
+import {StyleSheet, Image, KeyboardAvoidingView, Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import AppButton from '../components/AppButton';
 import AppTextInput from '../components/AppTextInput';
+import AppText from '../components/AppText';
 
-function loginScreen({navigation}) {
+function LoginScreen({navigation}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -61,12 +56,9 @@ function loginScreen({navigation}) {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-      <Image
-        source={require('../app/assets/quiz_icon.png')}
-        style={styles.logo}
-      />
-      <Text>You Know You Grow</Text>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+      <Image source={require('../assets/quiz_icon.png')} style={styles.logo} />
+      <AppText fontSize={20}>You Know You Grow</AppText>
 
       <AppTextInput
         placeholder="username"
@@ -82,35 +74,16 @@ function loginScreen({navigation}) {
   );
 }
 
-export default loginScreen;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: '#f8f4f4',
-  },
-  loginForm: {
-    width: '100%',
-    position: 'absolute',
-    top: 300,
-    alignItems: 'center',
-    padding: 10,
-  },
   logo: {
     width: 100,
-    margin: 10,
     height: 100,
-    resizeMode: 'contain',
-  },
-  logoContainer: {
-    position: 'absolute',
-    top: 70,
-    alignItems: 'center',
   },
   container: {
     flex: 1,
+    top: -120,
     alignItems: 'center',
     justifyContent: 'center',
   },

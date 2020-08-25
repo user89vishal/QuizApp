@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, TextInput, Platform} from 'react-native';
-import colors from '../app/assets/config/colors';
+import colors from '../config/colors';
 
 function AppTextInput({onChangeText, ...otherProps}) {
   return (

@@ -4,9 +4,9 @@ import {Text, StyleSheet} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 
-import LoginScreen from './screens/loginScreen';
-import WelcomeScreen from './screens/WelcomeScreen';
-import Quiz from './screens/Quiz';
+import LoginScreen from './app/screens/LoginScreen';
+import WelcomeScreen from './app/screens/WelcomeScreen';
+import Quiz from './app/screens/Quiz';
 
 const Stack = createStackNavigator();
 
@@ -16,9 +16,30 @@ function LogoTitle() {
 
 const StackNavigator = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Welcome" component={WelcomeScreen} />
-    <Stack.Screen name="Login" component={LoginScreen} />
-    <Stack.Screen name="Quiz" component={Quiz} />
+    <Stack.Screen
+      name="Welcome"
+      component={WelcomeScreen}
+      options={{
+        title: 'Quiz App',
+        headerTitleAlign: 'center',
+      }}
+    />
+    <Stack.Screen
+      name="Login"
+      component={LoginScreen}
+      options={{
+        title: 'Quiz App',
+        headerTitleAlign: 'center',
+      }}
+    />
+    <Stack.Screen
+      name="Quiz"
+      component={Quiz}
+      options={{
+        title: 'Quiz App',
+        headerTitleAlign: 'center',
+      }}
+    />
   </Stack.Navigator>
 );
 

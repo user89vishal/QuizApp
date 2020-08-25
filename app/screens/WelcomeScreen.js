@@ -2,24 +2,24 @@ import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
-  Text,
-  Platform,
   SafeAreaView,
   ActivityIndicator,
+  TouchableHighlight,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import AppButton from '../components/AppButton';
+import colors from '../config/colors';
+import AppText from '../components/AppText';
 
 function WelcomeScreen({navigation}) {
   const [userLoggedIn, setUserLogeedIn] = useState(true);
 
   const isCustomerLoggedIn = async () => {
     try {
-      const data = await AsyncStorage.getItem('userCredential');
-
-      if (data) {
-        const user = JSON.parse(data);
+      const userCredential = await AsyncStorage.getItem('userCredential');
+      if (userCredential) {
+        const user = JSON.parse(userCredential);
         if (user.username === 'adminUser' && user.password === '12345678') {
           navigation.replace('Quiz');
         }
@@ -27,6 +27,7 @@ function WelcomeScreen({navigation}) {
         setUserLogeedIn(false);
       }
     } catch (error) {
+      alert('Error occured while fetching credential, Please login to proceed');
       setUserLogeedIn(false);
     }
   };
@@ -37,39 +38,47 @@ function WelcomeScreen({navigation}) {
 
   return !userLoggedIn ? (
     <SafeAreaView style={styles.screen}>
-      <Text style={styles.welcomeText}>Welcome</Text>
-      <View style={styles.buttonContainer}>
-        <Text style={styles.text}>Start Quiz</Text>
-        <AppButton title="Start" onPress={() => navigation.replace('Login')} />
+      <View style={styles.title}>
+        <AppText fontSize={30}>Welcome</AppText>
+        <AppText fontSize={15}>Start Quiz</AppText>
       </View>
+      <TouchableHighlight
+        activeOpacity={0.6}
+        underlayColor={colors.lightGray}
+        style={styles.startIcon}
+        onPress={() => navigation.replace('Login')}>
+        <Icon name="play" size={30} color="#fff" />
+      </TouchableHighlight>
     </SafeAreaView>
   ) : (
     <SafeAreaView style={styles.loadingQuestions}>
       <ActivityIndicator size="large" color="#000" />
-      <Text>Getting User detail</Text>
+      <AppText fontSize={15}>Start Quiz</AppText>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  startIcon: {
+    paddingLeft: 5,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   screen: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: 18,
-    fontFamily: Platform.OS === 'android' ? 'Roboto' : 'Avenir',
-    marginVertical: 10,
-  },
-  welcomeText: {
-    position: 'absolute',
-    top: 200,
-    fontSize: 30,
-  },
-  buttonContainer: {
+  title: {
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
+    top: 50,
   },
   loadingQuestions: {
     flex: 1,

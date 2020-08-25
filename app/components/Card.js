@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 
