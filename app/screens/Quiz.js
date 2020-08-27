@@ -38,8 +38,25 @@ function Quiz({navigation}) {
       await AsyncStorage.clear();
       navigation.replace('Welcome');
     } catch (e) {
-      console.log('Error is: ', e);
+      InternalErrorAlert();
     }
+  };
+
+  const InternalErrorAlert = () => {
+    Alert.alert(
+      'Internal Error',
+      'Please Logout again',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            Alert.dismiss;
+            navigation.replace('Welcome');
+          },
+        },
+      ],
+      {cancelable: false},
+    );
   };
 
   handleLogout = () => {
@@ -87,6 +104,7 @@ function Quiz({navigation}) {
   };
 
   const handleSubmitPress = () => {
+    console.log('Length', answerArray.length, quizQuestions.length);
     if (answerArray.length === quizQuestions.length) {
       let correctAnswerCount = answerArray.filter(
         (element) => element.isOptionTrue === true,
@@ -108,6 +126,8 @@ function Quiz({navigation}) {
     collection.questionId = questionId;
     collection.isOptionTrue = value.isTrue;
 
+    console.log(collection);
+
     //if collection object already exist in answer array then delete it first
     answerArray.forEach(function (ans, index, object) {
       if (ans.questionId === collection.questionId) {
@@ -117,8 +137,6 @@ function Quiz({navigation}) {
 
     // //finally push collection object into answer array
     answerArray.push(collection);
-
-    console.log(answerArray);
   };
 
   return isDataLoading ? (
