@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {Text, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 
@@ -9,10 +9,6 @@ import WelcomeScreen from './app/screens/WelcomeScreen';
 import Quiz from './app/screens/Quiz';
 
 const Stack = createStackNavigator();
-
-function LogoTitle() {
-  return <Text style={styles.text}>Quiz</Text>;
-}
 
 const StackNavigator = () => (
   <Stack.Navigator>

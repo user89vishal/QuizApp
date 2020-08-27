@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 
 function Card({question, allAnswers, onSelect}) {

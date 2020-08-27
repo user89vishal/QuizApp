@@ -28,28 +28,17 @@ function LoginScreen({navigation}) {
     );
   };
 
-  const saveCredential = async () => {
-    try {
-      await AsyncStorage.setItem(
-        'userCredential',
-        JSON.stringify({username: username, password: password}),
-      );
-      const data = JSON.parse(await AsyncStorage.getItem('userCredential'));
-      return data;
-    } catch (error) {
-      saveCredentialFailAlert();
-      return {error: 'error'};
-    }
-  };
-
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (username === 'adminUser' && password === '12345678') {
-      (async () => {
-        let {username} = await saveCredential();
-        if (username) {
-          navigation.replace('Quiz');
-        }
-      })();
+      try {
+        await AsyncStorage.setItem(
+          'userCredential',
+          JSON.stringify({username: username, password: password}),
+        );
+        navigation.replace('Quiz');
+      } catch (error) {
+        saveCredentialFailAlert();
+      }
     } else {
       validationFailAlert();
     }

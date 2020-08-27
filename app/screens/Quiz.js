@@ -33,17 +33,17 @@ function Quiz({navigation}) {
     loadQuizQuestion();
   }, []);
 
-  clearAll = async () => {
+  clearCredential = async () => {
     try {
       await AsyncStorage.clear();
       navigation.replace('Welcome');
     } catch (e) {
-      console.log(e);
+      console.log('Error is: ', e);
     }
   };
 
   handleLogout = () => {
-    clearAll();
+    clearCredential();
   };
 
   React.useLayoutEffect(() => {
@@ -72,7 +72,6 @@ function Quiz({navigation}) {
 
     setError(false);
     const {results} = response.data;
-    console.log('Response is: ', results);
     results.forEach((item) => {
       item.id = Math.floor(Math.random() * 10000);
     });
@@ -81,7 +80,7 @@ function Quiz({navigation}) {
     setIsDataLoading(false);
   };
 
-  const alertTo = () => {
+  const quizNotCompleateAlert = () => {
     Alert.alert('Quiz', 'Quiz is not compleated', [{text: 'OK'}], {
       cancelable: false,
     });
@@ -92,13 +91,11 @@ function Quiz({navigation}) {
       let correctAnswerCount = answerArray.filter(
         (element) => element.isOptionTrue === true,
       ).length;
-      console.log('No of correct answers: ', correctAnswerCount);
 
       setCorrectAnswers(correctAnswerCount);
       setQuizCompleated(true);
     } else {
-      alertTo();
-      console.log('quiz is not compleated');
+      quizNotCompleateAlert();
     }
   };
 
